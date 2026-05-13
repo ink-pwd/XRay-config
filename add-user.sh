@@ -16,6 +16,7 @@ SHORT_ID="a1b2c3d4e5f6"
 # Создаем временный файл что бы безопасно хранить инфу
 TMP=$(mktemp)
 
+# Заменяем наш конфиг + выдаем права xray на его чтение
 jq --arg uuid "$UUID" --arg name "$NAME" '
 .inbounds[0].settings.clients += [
   {
