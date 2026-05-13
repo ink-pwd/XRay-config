@@ -3,11 +3,14 @@
 # Расположение пустого конфига xray
 CONFIG="/usr/local/etc/xray/config.json"
 
-# Генерируем уникальный UUID(приватный айди пользователя)
-UUID=$(cat /proc/sys/kernel/random/uuid)
-
 # Reality ключи шифрования(server + client)
-read -r PRIV PUB <<< $(xray x25519)
+OUT=$(xray x25519)
+
+PRIVATE=$(echo "$OUT" | grep "PrivateKey" | awk -F': ' '{print $2}')
+PUBLIC=$(echo "$OUT" | grep "PublicKey" | awk -F': ' '{print $2}')
+
+# Сохраняем ключ клиента для добавления новых пользователей
+echo "$PUBLIC" > /root/xray-public.key
 
 # Стандартный порт для https
 PORT=443
@@ -18,8 +21,7 @@ PORT=443
 # rules блокирует запрос клиента, если тот пытается обратиться к локальным серверам
 # слушаем все сетевые интерфейсы 0.0.0.0 для возможности подключения пользователя
 # протокол VLESS - тип скоростного подключения, за шифрование отвечает Reality
-# UUID для первого пользователя генерируем выше
-# xtls-rprx-vision - режим передачи данных в VLESS, оптимизирующий скорость и работу с TLS/Reality
+# Пользователей добавляем в отдельном скрипте
 # decryption: none - уточняем что VLESS не шифрует данные
 # fallbacks - если к нам пытается подключится не vpn клиент, а сканер либо еще кто-то - перенаправляем его на сайт нашего vps
 # включаем reality для маскировки трафика под обычные https
@@ -56,19 +58,15 @@ cat > "$CONFIG" <<EOF
             "port": $PORT,
             "protocol": "vless",
             "settings": {
-                "clients": [
+                "clients": [],
+                ,
+                "fallbacks": [
                     {
-                        "id": "$UUID",
-                        "flow": "xtls-rprx-vision"
+                        "dest": 80
                     }
                 ],
                 "decryption": "none"
             },
-            "fallbacks": [
-                {
-                    "dest": 80
-                }
-            ],
 
             "streamSettings": {
                 "network": "tcp",
@@ -80,9 +78,9 @@ cat > "$CONFIG" <<EOF
                     "serverNames": [ 
                         "www.pinterest.com"
                     ],
-                    "privateKey": "$PRIV", 
+                    "privateKey": "$PRIVATE", 
                     "shortIds": [ 
-                        "a1b2c3d4e5f6" // any string from 0 to F up to 16 digits
+                        "a1b2c3d4e5f6"
                     ]
                 }
             },
@@ -117,5 +115,4 @@ cat > "$CONFIG" <<EOF
 }
 EOF
 
-echo "UUID: $UUID"
-echo "PUBLIC KEY: $PUB"
+echo "PUBLIC KEY: $PUBLIC"
