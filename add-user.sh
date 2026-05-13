@@ -30,7 +30,8 @@ jq --arg uuid "$UUID" --arg name "$NAME" '
 systemctl restart xray
 
 # Формируем ссылку для подключения клиента
-LINK="vless://${UUID}@${SERVER_IP}:443?security=reality&sni=www.pinterest.com&fp=chrome&pbk=${PUBLIC_KEY}&sid=${SHORT_ID}&type=tcp&flow=xtls-rprx-vision#${EMAIL}"
+# encryption=none - уточняем, что VLESS ничего не шифрует
+LINK="vless://${UUID}@${SERVER_IP}:443?encryption=none&security=reality&sni=www.pinterest.com&fp=chrome&pbk=${PUBLIC_KEY}&sid=${SHORT_ID}&type=tcp&flow=xtls-rprx-vision#${NAME}"
 
 echo ""
 echo "UUID: $UUID"
