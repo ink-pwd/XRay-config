@@ -59,7 +59,6 @@ cat > "$CONFIG" <<EOF
             "protocol": "vless",
             "settings": {
                 "clients": [],
-                ,
                 "fallbacks": [
                     {
                         "dest": 80
