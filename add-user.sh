@@ -24,7 +24,7 @@ jq --arg uuid "$UUID" --arg name "$NAME" '
     email: $name
   }
 ]
-' "$CONFIG" > "$TMP" && mv "$TMP" "$CONFIG"
+' "$CONFIG" > "$TMP" && install -o root -g root -m 644 "$TMP" "$CONFIG"
 
 # Перезапускаемся после добавления пользователя
 systemctl restart xray
