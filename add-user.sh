@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Проверка аргумента
+if [ -z "$1" ]; then
+    echo "Использование: $0 <username>"
+    exit 1
+fi
+
 # Расположение конфига xray
 CONFIG="/usr/local/etc/xray/config.json"
 
@@ -13,10 +19,18 @@ PUBLIC_KEY=$(cat /root/xray-public.key)
 SERVER_IP="ТВОЙ_IP"
 SHORT_ID="a1b2c3d4e5f6"
 
+
+
+# Защита от забытого IP
+if [ "$SERVER_IP" = "ТВОЙ_IP" ]; then
+    echo "Error: please indicate SERVER_IP"
+    exit 1
+fi
+
 # Создаем временный файл что бы безопасно хранить инфу
 TMP=$(mktemp)
 
-# Заменяем наш конфиг + выдаем права xray на его чтение
+# Добавляем пользователя
 jq --arg uuid "$UUID" --arg name "$NAME" '
 .inbounds[0].settings.clients += [
   {
@@ -25,7 +39,18 @@ jq --arg uuid "$UUID" --arg name "$NAME" '
     email: $name
   }
 ]
-' "$CONFIG" > "$TMP" && install -o root -g root -m 644 "$TMP" "$CONFIG"
+' "$CONFIG" > "$TMP"
+
+# Проверка jq
+if [ $? -ne 0 ]; then
+    echo "Error: jq failed"
+    rm -f "$TMP"
+    exit 1
+fi
+
+# Замена конфига с сохранением прав
+install -o root -g root -m 644 "$TMP" "$CONFIG"
+rm -f "$TMP"
 
 # Перезапускаемся после добавления пользователя
 systemctl restart xray
