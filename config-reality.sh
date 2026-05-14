@@ -1,7 +1,10 @@
 #!/bin/bash
 
+# Подгружаем общие функции
+source ./xray-lib.sh
+
 # Расположение пустого конфига xray
-CONFIG="/usr/local/etc/xray/config.json"
+CONFIG=$(get_env CONFIG)
 
 # Reality ключи шифрования(server + client)
 OUT=$(xray x25519)
@@ -10,7 +13,7 @@ PRIVATE=$(echo "$OUT" | grep "PrivateKey" | awk -F': ' '{print $2}')
 PUBLIC=$(echo "$OUT" | grep "PublicKey" | awk -F': ' '{print $2}')
 
 # Сохраняем ключ клиента для добавления новых пользователей
-echo "$PUBLIC" > /root/xray-public.key
+sed -i "s|^PUBLIC_KEY=.*|PUBLIC_KEY=$PUBLIC|" /root/xray.env
 
 # Стандартный порт для https
 PORT=443

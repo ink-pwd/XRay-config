@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Подгружаем общие функции
+source ./xray-lib.sh
+
+
 # Проверка аргумента
 if [ -z "$1" ]; then
     echo "Использование: $0 <username>"
@@ -7,7 +11,7 @@ if [ -z "$1" ]; then
 fi
 
 # Расположение конфига xray
-CONFIG="/usr/local/etc/xray/config.json"
+CONFIG=$(get_env CONFIG)
 
 
 # Генерируем уникальный UUID(приватный айди пользователя)
@@ -15,17 +19,10 @@ UUID=$(cat /proc/sys/kernel/random/uuid)
 # Получаем имя пользователя из аргумента скрипта
 NAME="$1"
 
-PUBLIC_KEY=$(cat /root/xray-public.key)
-SERVER_IP="ТВОЙ_IP"
-SHORT_ID="a1b2c3d4e5f6"
+PUBLIC_KEY=$(get_env PUBLIC_KEY)
+SERVER_IP=$(get_env SERVER_IP)
+SHORT_ID=$(get_env SHORT_ID)
 
-
-
-# Защита от забытого IP
-if [ "$SERVER_IP" = "ТВОЙ_IP" ]; then
-    echo "Error: please indicate SERVER_IP"
-    exit 1
-fi
 
 # Создаем временный файл что бы безопасно хранить инфу
 TMP=$(mktemp)

@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Подгружаем общие функции
+source ./xray-lib.sh
+
 # Проверяем был ли передан ник
 if [ -z "$1" ]; then
     echo "Usage: $0 <username>"
@@ -7,7 +10,7 @@ if [ -z "$1" ]; then
 fi
 
 USERNAME="$1"
-CONFIG="/usr/local/etc/xray/config.json"
+CONFIG=$(get_env CONFIG)
 TMP=$(mktemp)
 
 # Проверка существования пользователя
