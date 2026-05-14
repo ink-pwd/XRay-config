@@ -23,7 +23,7 @@ cd XRay-config-main && chmod +x setup.sh && ./setup.sh
 ```
 
 ### Other func
-Use ```bash add-user.sh <name> ``` and ``` delete-user.sh <name> ``` to add and remove users respectively
+Use ``` add-user.sh <name> ``` and ``` delete-user.sh <name> ``` to add and remove users respectively
 
 ## Recommendations
 Close the IPv6 address if you have.
