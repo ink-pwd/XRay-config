@@ -10,8 +10,6 @@ if [[ -z "$PORT" || ! "$PORT" =~ ^[0-9]+$ ]]; then
     exit 1
 fi
 
-echo "XRay port: ${PORT}"
-
 # Закрываем лишние порты firewall(оставляем ssh, nginx(site), vpn)
 
 # Закрываем все, что не разрешено

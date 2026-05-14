@@ -15,8 +15,13 @@ PUBLIC=$(echo "$OUT" | grep "PublicKey" | awk -F': ' '{print $2}')
 # Сохраняем ключ клиента для добавления новых пользователей
 sed -i "s|^PUBLIC_KEY=.*|PUBLIC_KEY=$PUBLIC|" /root/xray.env
 
-# Стандартный порт для https
-PORT=$(get_env PORT)
+
+PORT=$(get_env PORT | tr -d '[:space:]')
+
+if [[ -z "$PORT" || ! "$PORT" =~ ^[0-9]+$ ]]; then
+    echo "ERROR: invalid PORT: [$PORT]"
+    exit 1
+fi
 
 # конфиг VLESS + REALITY
 # логирование полностью отключено, не храним ничего на сервере
