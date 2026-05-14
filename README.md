@@ -19,7 +19,7 @@ wget https://github.com/ink-pwd/XRay-config/archive/refs/heads/main.zip -O xray.
 
 ### Run default setup
 ```bash
-cd XRay-config && chmod +x setup.sh && ./setup.sh
+cd XRay-config-main && chmod +x setup.sh && ./setup.sh
 ```
 
 ### Other func
