@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Подгружаем общие функции
-source ./xray-lib.sh
+source ./common.sh
 
 
 # Проверка аргумента

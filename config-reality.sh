@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Подгружаем общие функции
-source ./xray-lib.sh
+source ./common.sh
 
 # Расположение пустого конфига xray
 CONFIG=$(get_env CONFIG)

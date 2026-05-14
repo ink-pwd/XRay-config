@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Подгружаем общие функции
-source ./xray-lib.sh
+source ./common.sh
 
 # Проверяем был ли передан ник
 if [ -z "$1" ]; then
