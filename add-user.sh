@@ -10,8 +10,6 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-# Расположение конфига xray
-CONFIG=$(get_env CONFIG)
 
 
 # Генерируем уникальный UUID(приватный айди пользователя)
@@ -19,9 +17,12 @@ UUID=$(cat /proc/sys/kernel/random/uuid)
 # Получаем имя пользователя из аргумента скрипта
 NAME="$1"
 
+
+CONFIG=$(get_env CONFIG)
 PUBLIC_KEY=$(get_env PUBLIC_KEY)
 SERVER_IP=$(get_env SERVER_IP)
 SHORT_ID=$(get_env SHORT_ID)
+PORT=$(get_env PORT)
 
 
 # Создаем временный файл что бы безопасно хранить инфу

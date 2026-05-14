@@ -1,16 +1,25 @@
 #!/bin/bash
 
+# Подгружаем общие функции
+source ./common.sh
+
+PORT=$(get_env PORT)
+
 # Закрываем лишние порты firewall(оставляем ssh, nginx(site), vpn)
+
+# Закрываем все, что не разрешено
+ufw default deny incoming
+ufw default allow outgoing
+
+# Разрешаем нужное
 ufw allow 22/tcp
 ufw allow 80/tcp
-ufw allow 443/tcp
+ufw allow ${PORT}/tcp
 
 ufw --force enable
 
 
 # Баним на час ip, если более 5-х раз был неправильно введен пароль ssh
-systemctl enable fail2ban
-systemctl start fail2ban
 
 cat > /etc/fail2ban/jail.local <<EOF
 [sshd]
@@ -20,4 +29,7 @@ maxretry = 5
 findtime = 10m
 bantime = 1h
 EOF
-systemctl restart fail2ban
+
+
+systemctl enable fail2ban
+systemctl start fail2ban

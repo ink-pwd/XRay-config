@@ -16,7 +16,7 @@ PUBLIC=$(echo "$OUT" | grep "PublicKey" | awk -F': ' '{print $2}')
 sed -i "s|^PUBLIC_KEY=.*|PUBLIC_KEY=$PUBLIC|" /root/xray.env
 
 # Стандартный порт для https
-PORT=443
+PORT=$(get_env PORT)
 
 # конфиг VLESS + REALITY
 # логирование полностью отключено, не храним ничего на сервере
@@ -80,6 +80,7 @@ cat > "$CONFIG" <<EOF
                     "serverNames": [ 
                         "www.pinterest.com"
                     ],
+                    "fingerprint": "chrome",
                     "privateKey": "$PRIVATE", 
                     "shortIds": [ 
                         "a1b2c3d4e5f6"
@@ -109,7 +110,7 @@ cat > "$CONFIG" <<EOF
     "policy": {
         "levels": {
             "0": {
-                "handshake": 3,
+                "handshake": 5,
                 "connIdle": 120
             }
         }
