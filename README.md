@@ -23,7 +23,10 @@ cd XRay-config-main && chmod +x setup.sh && ./setup.sh
 ```
 
 ### Other func
-Use add-user.sh <name> and delete-user.sh <name> to add and remove users respectively
+Use ```bash add-user.sh <name> ``` and ``` delete-user.sh <name> ``` to add and remove users respectively
 
 ## Recommendations
 Close the IPv6 address if you have.
+```bash
+sudo sed -i '/net.ipv6.conf.all.disable_ipv6/d; /net.ipv6.conf.default.disable_ipv6/d; /net.ipv6.conf.lo.disable_ipv6/d' /etc/sysctl.conf && echo -e "net.ipv6.conf.all.disable_ipv6 = 1\nnet.ipv6.conf.default.disable_ipv6 = 1\nnet.ipv6.conf.lo.disable_ipv6 = 1" | sudo tee -a /etc/sysctl.conf && sudo sysctl -p && [ "$(cat /proc/sys/net/ipv6/conf/all/disable_ipv6)" -eq 1 ] && echo "Success" || echo "Error"
+```
