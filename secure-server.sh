@@ -3,7 +3,14 @@
 # Подгружаем общие функции
 source ./common.sh
 
-PORT=$(get_env PORT)
+PORT=$(get_env PORT | tr -d '[:space:]')
+
+if [[ -z "$PORT" || ! "$PORT" =~ ^[0-9]+$ ]]; then
+    echo "ERROR: invalid PORT: [$PORT]"
+    exit 1
+fi
+
+echo "XRay port: ${PORT}"
 
 # Закрываем лишние порты firewall(оставляем ssh, nginx(site), vpn)
 
