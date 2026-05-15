@@ -5,6 +5,8 @@ apt update && apt upgrade
 
 # Ставим nginx что бы создать сайт
 apt install nginx -y
+apt install openssl -y
+apt-get install libnginx-mod-stream -y
 
 # Для удобного редактирования json
 apt install jq -y

@@ -9,6 +9,7 @@ if [ -z "$IP" ]; then
     exit 1
 fi
 
+# 443 порт использовать нельзя, его слушает nginx
 cat > /root/xray.env <<EOF
 SERVER_IP=$IP
 SHORT_ID=a1b2c3d4e5f6

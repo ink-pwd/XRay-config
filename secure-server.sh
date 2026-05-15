@@ -1,16 +1,6 @@
 #!/bin/bash
 
-# Подгружаем общие функции
-source ./common.sh
-
-PORT=$(get_env PORT | tr -d '[:space:]')
-
-if [[ -z "$PORT" || ! "$PORT" =~ ^[0-9]+$ ]]; then
-    echo "ERROR: invalid PORT: [$PORT]"
-    exit 1
-fi
-
-# Закрываем лишние порты firewall(оставляем ssh, nginx(site), vpn)
+# Закрываем лишние порты firewall(оставляем ssh, nginx(80/443)
 
 # Закрываем все, что не разрешено
 ufw default deny incoming
@@ -19,7 +9,7 @@ ufw default allow outgoing
 # Разрешаем нужное
 ufw allow 22/tcp
 ufw allow 80/tcp
-ufw allow ${PORT}/tcp
+ufw allow 443/tcp
 
 ufw --force enable
 
